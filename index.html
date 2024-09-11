@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/dist/css/style.css">
+    <title>Игра: Стиральная машина</title>
+</head>
+<body>
+    <header>
+        <h1>Стиральная машина - Игра</h1>
+    </header>
+
+    <div id="machine">
+        <div id="door"></div>
+        <div id="circle"></div>
+
+    </div>
+
+    <main>
+        <h2>Действия</h2>
+        <div class="buttons">
+            <button class="btn1" id="add-clothes">Добавить белье</button>
+            <button class="btn2" id="add-detergent">Добавить моющее средство</button>
+            <button class="btn3" id="start-wash">Начать стирку</button>
+        </div>
+        <p id="special-message" class="hidden"></p>
+        <div id="status">Статус: Ожидание действий...</div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
