@@ -9,21 +9,25 @@ const circle = document.getElementById("circle");
 let hasClothes = false;
 
 let hasDetergent = false;
+let messageTimer;
+
+function clearMessage() {
+    clearTimeout(messageTimer);
+    specialMessage.classList.add("hidden");
+    specialMessage.textContent = "";
+}
 
 const addStuff = (type, textMessage, btnEl) => {
     if (type === "clothes") {
-        hasClothes = !hasClothes;
+        hasClothes = true;
     } else if (type === "detergent") {
-        hasDetergent = !hasDetergent;
+        hasDetergent = true;
     }
     specialMessage.textContent = textMessage;
     btnEl.setAttribute("disabled", true);
     specialMessage.classList.remove("hidden");
-    setTimeout(() => {
-        specialMessage.classList.add("hidden");
-        specialMessage.textContent = "";
-    }, 3000);
-
+    clearTimeout(messageTimer);
+    messageTimer = setTimeout(clearMessage, 3000);
 }
 
 
@@ -31,7 +35,7 @@ const addWater = () => {
     return new Promise((resolve) => {
         statusText.innerText = "Машинка наполняется водой..."
         setTimeout(() => {
-            resolve("Машика наполнилась водой.");
+            resolve("Машинка наполнилась водой.");
         }, 5000);
     })
 }
@@ -65,6 +69,11 @@ const endWash = () => {
 }
 
 const startWash = async () => {
+    if (startWashBtn.disabled) return;
+
+    startWashBtn.disabled = true;
+    clearMessage();
+
     try {
         addClothesBtn.setAttribute("disabled", true);
         addDetergentBtn.setAttribute("disabled", true);
@@ -83,18 +92,12 @@ const startWash = async () => {
 
     }
     finally {
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        statusText.innerText = "Стирка окончена.";
         circle.classList.remove("addAnimation");
-        addClothesBtn.removeAttribute("disabled");
-        addDetergentBtn.removeAttribute("disabled");
         hasClothes = false;
         hasDetergent = false;
-        setTimeout(() => {
-            statusText.innerText += `\n Начать стирку заново?`;
-        }, 4000);
-        await new Promise(resolve => setTimeout(resolve, 8000))
-        statusText.innerText = " Статус: Ожидание действий...";
+        addClothesBtn.disabled = false;
+        addDetergentBtn.disabled = false;
+        startWashBtn.disabled = false;
     }
 }
 
