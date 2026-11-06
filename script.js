@@ -4,6 +4,7 @@ const startWashBtn = document.getElementById("start-wash");
 const statusText = document.getElementById("status");
 const specialMessage = document.getElementById("special-message");
 const circle = document.getElementById("circle");
+const machine = document.getElementById("machine");
 
 
 let hasClothes = false;
@@ -24,7 +25,8 @@ const addStuff = (type, textMessage, btnEl) => {
         hasDetergent = true;
     }
     specialMessage.textContent = textMessage;
-    btnEl.setAttribute("disabled", true);
+    btnEl.disabled = true;
+    btnEl.setAttribute("aria-pressed", "true");
     specialMessage.classList.remove("hidden");
     clearTimeout(messageTimer);
     messageTimer = setTimeout(clearMessage, 3000);
@@ -77,7 +79,8 @@ const startWash = async () => {
     try {
         addClothesBtn.setAttribute("disabled", true);
         addDetergentBtn.setAttribute("disabled", true);
-        circle.classList.add("addAnimation");
+        machine.dataset.running = "true";
+        circle.classList.add("motion-safe:animate-spin");
         statusText.innerText = await addWater();
         await new Promise(resolve => setTimeout(resolve, 3000));
         const washMessage = await washClothes();
@@ -92,7 +95,10 @@ const startWash = async () => {
 
     }
     finally {
-        circle.classList.remove("addAnimation");
+        machine.dataset.running = "false";
+        circle.classList.remove("motion-safe:animate-spin");
+        addClothesBtn.setAttribute("aria-pressed", "false");
+        addDetergentBtn.setAttribute("aria-pressed", "false");
         hasClothes = false;
         hasDetergent = false;
         addClothesBtn.disabled = false;
